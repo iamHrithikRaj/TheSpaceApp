@@ -9,4 +9,4 @@ The Space App is an Android application which helps people pratice social-distan
 
 <img src="Screenshots/img3.png" width="350">    <img src="Screenshots/img4.png" width="350">
 
-<img src="Screenshots/img5png" width="350">
+<img src="Screenshots/img5.png" width="350">
