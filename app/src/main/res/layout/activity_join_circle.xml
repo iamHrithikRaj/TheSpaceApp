@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/info_view_bg">
+    <Button
+        android:id="@+id/go_back"
+        android:onClick="gotoBack"
+        android:layout_width="49dp"
+        android:layout_height="49dp"
+        android:background="@drawable/go_back"
+        android:layout_marginTop="57dp"
+        android:layout_marginStart="10dp"/>
+
+    <ImageView
+        android:id="@+id/img"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@drawable/add2circle"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="110dp"/>
+
+    <com.goodiebag.pinview.Pinview
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginTop="30dp"
+        app:pinLength="6"
+        app:pinWidth="40dp"
+        app:pinHeight="40dp"
+        app:cursorVisible="true"
+        app:forceKeyboard="true"
+        app:inputType="number"
+        android:layout_below="@id/img"
+        android:id="@+id/pin_view"/>
+
+    <Button
+        android:layout_width="380dp"
+        android:layout_height="wrap_content"
+        android:onClick="joinButtonClick"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="620dp"
+        android:background="@drawable/rounded_button"
+        android:text="join"
+        android:textColor="@color/white"
+        android:textSize="20sp"/>
+</RelativeLayout>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:layout_gravity="bottom"
+    android:layout_width="match_parent"
+    android:background="@android:color/transparent"
+    android:layout_height="match_parent">
+    <!--add background-->
+
+    <Button
+        android:id="@+id/profile_image"
+        android:onClick="gotoUserProfile"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/settings"
+        android:layout_marginTop="57dp"
+        android:layout_marginStart="10dp"/>
+    <Button
+        android:id="@+id/refresh_image"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:onClick="refresh"
+        android:background="@drawable/refresh"
+        android:layout_marginTop="57dp"
+        android:layout_marginStart="369dp"/>
+
+    <ImageView
+        android:id="@+id/center_image"
+        android:layout_width="88dp"
+        android:layout_height="88dp"
+        android:layout_gravity="center|bottom"
+        android:src="@drawable/radar"
+        android:layout_marginBottom="96dp"/>
+
+    <ImageView
+        android:id="@+id/start_image"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_gravity="start|bottom"
+        android:layout_marginStart="24dp"
+        android:src="@drawable/chat"
+        android:layout_marginBottom="56dp"/>
+    <ImageView
+        android:id="@+id/end_image"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_gravity="end|bottom"
+        android:layout_marginEnd="24dp"
+        android:src="@drawable/globe"
+        android:layout_marginBottom="56dp"/>
+
+    <ImageView
+        android:id="@+id/reference"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_gravity="center|bottom"
+        android:src="@drawable/circle"
+        android:layout_marginBottom="48dp"/>
+
+    <View
+        android:id="@+id/indicator"
+        android:layout_width="48dp"
+        android:layout_height="4dp"
+        android:layout_marginBottom="44dp"
+        android:background="@drawable/indiactor"
+        android:layout_gravity="bottom|center"/>
+</FrameLayout>

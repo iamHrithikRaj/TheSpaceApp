@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "274074712664",
+    "firebase_url": "https://space-159dc.firebaseio.com",
+    "project_id": "space-159dc",
+    "storage_bucket": "space-159dc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:274074712664:android:eb2004e63e9fe3b9b8e82d",
+        "android_client_info": {
+          "package_name": "com.project.space"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "274074712664-l7o8khj2qe8du8b357a92evi1h4hgdva.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.project.space",
+            "certificate_hash": "b13810179cd73798aa0d2a69f723b0d9c9dc811d"
+          }
+        },
+        {
+          "client_id": "274074712664-g5b45f3sd6esabgmqrcqjrgk6amouovd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbOyD_dXUphkjGGcC_zTUWPcQ3fIDlIWk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "274074712664-g5b45f3sd6esabgmqrcqjrgk6amouovd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
