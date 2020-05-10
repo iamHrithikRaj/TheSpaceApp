@@ -67,7 +67,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Navigat
     String circleMemberId;
     FirebaseUser user;
     Circle circle;
-    DatabaseReference usersReference,currUserReference;
 
     public static MapFragment newInstance(){
         return new MapFragment();
@@ -168,45 +167,29 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Navigat
                 .fillColor(Color.argb(0, 0, 0, 195))
                 .clickable(true));*/
 
-        /*usersReference = FirebaseDatabase.getInstance().getReference().child("users");
-        currUserReference = FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid());
-        reference = FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid()).child("JoinedCircleMembers");
-
+        //usersReference = FirebaseDatabase.getInstance().getReference().child("users");
+        //currUserReference = FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid());
+        //reference = FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid()).child("JoinedCircleMembers");
+                /*reference = FirebaseDatabase.getInstance().getReference().child("users");
                 reference.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if(dataSnapshot.exists()){
                             for(DataSnapshot dss:dataSnapshot.getChildren()){
-                                circleMemberId = dss.child("circleMemberId").getValue(String.class);
-                                if(circleMemberId!=null) {
-                                    usersReference.child(circleMemberId).addListenerForSingleValueEvent(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                            createUser = dataSnapshot.getValue(CreateUser.class);
-                                            LatLng ll = new LatLng(createUser.lat,createUser.lng);
-                                            spaceMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.pin)).position(ll).title(createUser.name));
-                                        }
-
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                                            Toast.makeText(getContext(), databaseError.getMessage(), Toast.LENGTH_LONG).show();
-                                        }
-                                    });
-                                }
+                                currUser = dss.getValue(CreateUser.class);
+                                LatLng ll = new LatLng(createUser.lat,createUser.lng);
+                                spaceMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.pin)).position(ll).title(createUser.name));
                             }
                         }
                     }
-
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
                         Toast.makeText(getContext(),databaseError.getMessage(),Toast.LENGTH_LONG).show();
                     }
                 });*/
     }
-
     @Override
     public void onConnectionSuspended(int i) {
         client.connect();
     }
-
 }

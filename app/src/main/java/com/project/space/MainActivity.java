@@ -20,6 +20,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -34,8 +35,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.maps.android.SphericalUtil;
 import com.karan.churi.PermissionManager.PermissionManager;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -45,7 +48,7 @@ import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity{
     Timer t = new Timer();
-
+    LatLng latLngFrom, latLngTo;
     static ArrayList<Location>locList;
     ImageView status;
     RelativeLayout main_layout;
@@ -57,6 +60,7 @@ public class MainActivity extends AppCompatActivity{
     PermissionManager manager;
     CreateUser currUser;
     FirebaseAuth mAuth;
+    DataSnapshot userProfile;
     FirebaseUser user;
     double tempDis;
     int count;
@@ -118,7 +122,7 @@ public class MainActivity extends AppCompatActivity{
                     }
                 },
                 0,      // run first occurrence immediatetly
-                60000); // run every two seconds
+                120000); // run every two seconds
     }
 
     @Override
@@ -168,8 +172,6 @@ public class MainActivity extends AppCompatActivity{
                 finish();
     }
     public void checkSurroundings(){
-        //nList = new ArrayList<>();
-        //locList = new ArrayList<>();
 
         usersReference = FirebaseDatabase.getInstance().getReference().child("users");
         currUserReference = FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid());
@@ -179,13 +181,13 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 currUser = dataSnapshot.getValue(CreateUser.class);
-                final DataSnapshot userProfile = dataSnapshot;
+                userProfile = dataSnapshot;
                 //Toast.makeText(getApplicationContext(),"Success",Toast.LENGTH_SHORT).show();
-
                 count = currUser.count;
-                final Location currUserLoc = new Location("");
+                latLngFrom = new LatLng(currUser.lat,currUser.lng);
+                /*final Location currUserLoc = new Location("");
                 currUserLoc.setLatitude(currUser.lat);
-                currUserLoc.setLongitude(currUser.lng);
+                currUserLoc.setLongitude(currUser.lng);*/
                 reference.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -197,18 +199,23 @@ public class MainActivity extends AppCompatActivity{
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                             createUser = dataSnapshot.getValue(CreateUser.class);
-                                            Location userLoc = new Location("");
+                                            latLngTo = new LatLng(createUser.lat,createUser.lng);
+                                            /*Location userLoc = new Location("");
                                             userLoc.setLatitude(createUser.lat);
-                                            userLoc.setLongitude(createUser.lng);
+                                            userLoc.setLongitude(createUser.lng);*/
                                             Double distance1 = userProfile.child("JoinedCircleMembers").child(createUser.user_id).child("currDistance").getValue(Double.class);
                                             Double distance2 = userProfile.child("JoinedCircleMembers").child(createUser.user_id).child("prevDistance").getValue(Double.class);
                                             if (distance1 != null && distance2 != null) {
-                                                tempDis = currUserLoc.distanceTo(userLoc);
-                                                if (Double.compare(tempDis,1.5)<0 && Double.compare(distance1,distance2)!=0) {
+                                                //tempDis = currUserLoc.distanceTo(userLoc);
+                                                tempDis = SphericalUtil.computeDistanceBetween(latLngFrom, latLngTo);
+                                                //tempDis = CalculationByDistance(latLngFrom, latLngTo);
+                                                tempDis = Math.floor(tempDis * 100) / 100;
+                                                if (Double.compare(tempDis,1.50)<0 && Double.compare(distance1,distance2)!=0) {
                                                     //++count;
-                                                    //int temp = ++count;
                                                     if (count >=0) {
-                                                        currUserReference.child("count").setValue(++count);
+                                                        int temp = count;
+                                                        currUserReference.child("count").setValue(++temp);
+                                                        temp = 0;
                                                     }
                                                     //usersReference.child(createUser.user_id).child("JoinedCircleMembers").child(user.getUid()).child("prevDistance").setValue(distance1);
                                                     //usersReference.child(createUser.user_id).child("JoinedCircleMembers").child(user.getUid()).child("currDistance").setValue(tempDis);
@@ -217,7 +224,9 @@ public class MainActivity extends AppCompatActivity{
                                                     //int temp = --count;
                                                     //if (temp > 0) {
                                                     if(count>0){
-                                                        currUserReference.child("count").setValue(--count);
+                                                        int temp = count;
+                                                        currUserReference.child("count").setValue(--temp);
+                                                        temp = 0;
                                                     }
                                                     //usersReference.child(createUser.user_id).child("JoinedCircleMembers").child(user.getUid()).child("prevDistance").setValue(distance1);
                                                     //usersReference.child(createUser.user_id).child("JoinedCircleMembers").child(user.getUid()).child("currDistance").setValue(tempDis);
@@ -304,7 +313,7 @@ public class MainActivity extends AppCompatActivity{
     }
 
     public void refresh(View vb){
-        Toast.makeText(getApplicationContext(),"Refreshing...",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(),"Scanning your surroundings...",Toast.LENGTH_LONG).show();
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         // Vibrate for 500 milliseconds
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -314,5 +323,28 @@ public class MainActivity extends AppCompatActivity{
             v.vibrate(5000);
         }
     }
+    /*public double CalculationByDistance(LatLng StartP, LatLng EndP) {
+        int Radius = 6371;// radius of earth in Km
+        double lat1 = StartP.latitude;
+        double lat2 = EndP.latitude;
+        double lon1 = StartP.longitude;
+        double lon2 = EndP.longitude;
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLon = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+                + Math.cos(Math.toRadians(lat1))
+                * Math.cos(Math.toRadians(lat2)) * Math.sin(dLon / 2)
+                * Math.sin(dLon / 2);
+        double c = 2 * Math.asin(Math.sqrt(a));
+        double valueResult = Radius * c;
+        double km = valueResult / 1;
+        DecimalFormat newFormat = new DecimalFormat("####");
+        int kmInDec = Integer.valueOf(newFormat.format(km));
+        double meter = valueResult % 1000;
+        int meterInDec = Integer.valueOf(newFormat.format(meter));
+        Log.i("Radius Value", "" + valueResult + "   KM  " + kmInDec
+                + " Meter   " + meterInDec);
 
+        return Radius * c;
+    }*/
 }
