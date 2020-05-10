@@ -63,6 +63,6 @@
         android:layout_marginTop="10dp"
         android:textSize="10sp"
         android:textAlignment="center"
-        android:text="Version: v0.6"/>
+        android:text="Version: v2.0"/>
 
 </LinearLayout>

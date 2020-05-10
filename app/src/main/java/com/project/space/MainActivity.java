@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity{
     FirebaseAuth mAuth;
     DataSnapshot userProfile;
     FirebaseUser user;
-    double tempDis;
+    int tempDis;
     int count;
     FragmentPagerAdapter adapterViewPager;
     private final int REQUEST_LOCATION_PERMISSION = 1;
@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity{
                     }
                 },
                 0,      // run first occurrence immediatetly
-                120000); // run every two seconds
+                100000); // run every two seconds
     }
 
     @Override
@@ -203,41 +203,74 @@ public class MainActivity extends AppCompatActivity{
                                             /*Location userLoc = new Location("");
                                             userLoc.setLatitude(createUser.lat);
                                             userLoc.setLongitude(createUser.lng);*/
-                                            Double distance1 = userProfile.child("JoinedCircleMembers").child(createUser.user_id).child("currDistance").getValue(Double.class);
-                                            Double distance2 = userProfile.child("JoinedCircleMembers").child(createUser.user_id).child("prevDistance").getValue(Double.class);
+                                            Integer distance1 = userProfile.child("JoinedCircleMembers").child(createUser.user_id).child("currDistance").getValue(Integer.class);
+                                            Integer distance2 = userProfile.child("JoinedCircleMembers").child(createUser.user_id).child("prevDistance").getValue(Integer.class);
+                                            tempDis = (int)(SphericalUtil.computeDistanceBetween(latLngFrom, latLngTo));
+                                            //tempDis = Math.floor(tempDis * 100) / 100;
                                             if (distance1 != null && distance2 != null) {
-                                                //tempDis = currUserLoc.distanceTo(userLoc);
-                                                tempDis = SphericalUtil.computeDistanceBetween(latLngFrom, latLngTo);
-                                                //tempDis = CalculationByDistance(latLngFrom, latLngTo);
-                                                tempDis = Math.floor(tempDis * 100) / 100;
-                                                if (Double.compare(tempDis,1.50)<0 && Double.compare(distance1,distance2)!=0) {
-                                                    //++count;
-                                                    if (count >=0) {
-                                                        int temp = count;
-                                                        currUserReference.child("count").setValue(++temp);
-                                                        temp = 0;
+                                                int d1 = distance1;
+                                                int d2 = distance2;
+                                                /*if(Double.compare(distance1,0)==0 && Double.compare(tempDis, distance1)!=0){
+                                                    //tempDis = SphericalUtil.computeDistanceBetween(latLngFrom, latLngTo);
+                                                    if(count>=0) {
+                                                        ++count;
+                                                        reference.child(createUser.user_id).child("currDistance").setValue(tempDis);
+                                                        currUserReference.child("count").setValue(count);
                                                     }
-                                                    //usersReference.child(createUser.user_id).child("JoinedCircleMembers").child(user.getUid()).child("prevDistance").setValue(distance1);
-                                                    //usersReference.child(createUser.user_id).child("JoinedCircleMembers").child(user.getUid()).child("currDistance").setValue(tempDis);
-                                                } else if (Double.compare(tempDis,1.5)>0 && Double.compare(distance1,distance2)!=0) {
-                                                    //--count;
-                                                    //int temp = --count;
-                                                    //if (temp > 0) {
-                                                    if(count>0){
-                                                        int temp = count;
-                                                        currUserReference.child("count").setValue(--temp);
-                                                        temp = 0;
-                                                    }
-                                                    //usersReference.child(createUser.user_id).child("JoinedCircleMembers").child(user.getUid()).child("prevDistance").setValue(distance1);
-                                                    //usersReference.child(createUser.user_id).child("JoinedCircleMembers").child(user.getUid()).child("currDistance").setValue(tempDis);
-                                                }
-                                                reference.child(createUser.user_id).child("currDistance").setValue(tempDis);
-                                                reference.child(createUser.user_id).child("prevDistance").setValue(distance1);
+                                                }else {*/
+                                                    //tempDis = currUserLoc.distanceTo(userLoc);
+                                                    //tempDis = SphericalUtil.computeDistanceBetween(latLngFrom, latLngTo);
+                                                    //tempDis = CalculationByDistance(latLngFrom, latLngTo);
+                                                    //tempDis = Math.floor(tempDis * 100) / 100;
+                                                    /*if(Double.compare(tempDis, 1.50)<0){
 
-                                                //currUser.child("JoinedCircleMembers").child(createUser.user_id).child("currDistance");
-                                                //userProfile.child("JoinedCircleMembers").child(createUser.user_id).child("prevDistance").setValue(distance1);
-                                                //usersReference.child(user.getUid()).child("JoinedCircleMembers").child(createUser.user_id).child("currDistance").setValue(tempDis);
-                                                //usersReference.child(user.getUid()).child("JoinedCircleMembers").child(createUser.user_id).child("prevDistance").setValue(distance1);
+                                                    }
+                                                    if(Double.compare(tempDis, 1.50)<0 && Double.compare(tempDis, distance1)>0){
+
+                                                    }*/
+                                                    if(tempDis > 1 && tempDis > distance1){
+                                                        if(count>0) {
+                                                            --count;
+                                                            currUserReference.child("count").setValue(count);
+                                                            reference.child(createUser.user_id).child("currDistance").setValue(tempDis);
+                                                        }
+                                                    }
+                                                    if(tempDis < 1 && tempDis < distance1){
+                                                        if(count>=0) {
+                                                            count++;
+                                                            currUserReference.child("count").setValue(count);
+                                                            reference.child(createUser.user_id).child("currDistance").setValue(tempDis);
+                                                        }
+                                                    }
+                                                    /*if (Double.compare(tempDis, 1.50) < 0 && Double.compare(distance1, distance2) != 0 && Double.compare(tempDis, distance2) < 0) {
+                                                        //++count;
+                                                        if (count >= 0) {
+                                                            int temp = count;
+                                                            currUserReference.child("count").setValue(++temp);
+                                                            temp = 0;
+                                                        }
+                                                        //usersReference.child(createUser.user_id).child("JoinedCircleMembers").child(user.getUid()).child("prevDistance").setValue(distance1);
+                                                        //usersReference.child(createUser.user_id).child("JoinedCircleMembers").child(user.getUid()).child("currDistance").setValue(tempDis);
+                                                    } else if (Double.compare(tempDis, 1.5) > 0 && Double.compare(distance1, distance2) != 0 && Double.compare(distance1, distance2) > 0) {
+                                                        //--count;
+                                                        //int temp = --count;
+                                                        //if (temp > 0) {
+                                                        if (count > 0) {
+                                                            int temp = count;
+                                                            currUserReference.child("count").setValue(--temp);
+                                                            temp = 0;
+                                                        }
+                                                        //usersReference.child(createUser.user_id).child("JoinedCircleMembers").child(user.getUid()).child("prevDistance").setValue(distance1);
+                                                        //usersReference.child(createUser.user_id).child("JoinedCircleMembers").child(user.getUid()).child("currDistance").setValue(tempDis);
+                                                    }
+
+                                                    reference.child(createUser.user_id).child("prevDistance").setValue(distance1);
+
+                                                    //currUser.child("JoinedCircleMembers").child(createUser.user_id).child("currDistance");
+                                                    //userProfile.child("JoinedCircleMembers").child(createUser.user_id).child("prevDistance").setValue(distance1);
+                                                    //usersReference.child(user.getUid()).child("JoinedCircleMembers").child(createUser.user_id).child("currDistance").setValue(tempDis);
+                                                    //usersReference.child(user.getUid()).child("JoinedCircleMembers").child(createUser.user_id).child("prevDistance").setValue(distance1);*/
+                                                //}
                                             }
                                         }
 
@@ -312,16 +345,9 @@ public class MainActivity extends AppCompatActivity{
         });
     }
 
-    public void refresh(View vb){
-        Toast.makeText(getApplicationContext(),"Scanning your surroundings...",Toast.LENGTH_LONG).show();
-        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        // Vibrate for 500 milliseconds
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            v.vibrate(VibrationEffect.createOneShot(5000, VibrationEffect.DEFAULT_AMPLITUDE));
-        } else {
-            //deprecated in API 26
-            v.vibrate(5000);
-        }
+    public void refresh(View v){
+        Toast.makeText(getApplicationContext(),"Scanning your Space...",Toast.LENGTH_LONG).show();
+        checkSurroundings();
     }
     /*public double CalculationByDistance(LatLng StartP, LatLng EndP) {
         int Radius = 6371;// radius of earth in Km
